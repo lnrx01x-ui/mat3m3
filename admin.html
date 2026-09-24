@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="لوحة تحكم مطعمنا لإدارة الطلبات" />
-    <title>لوحة تحكم المطعم</title>
+    <meta name="description" content="لوحة تحكم كبابجي العرب لإدارة الطلبات" />
+    <title>لوحة تحكم كبابجي العرب</title>
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="admin.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
-    <script src="admin.js" defer></script>
+    <script src="admin.js?v=20260924-final" defer></script>
   </head>
   <body>
     <main class="admin-main">
       <section id="login-section" class="login-section" aria-labelledby="login-title">
-        <p class="eyebrow">مطعمنا</p>
+        <p class="eyebrow">كبابجي العرب</p>
         <h1 id="login-title">دخول لوحة التحكم</h1>
         <form id="login-form">
           <label class="form-field" for="admin-email">البريد الإلكتروني</label>
@@ -27,9 +27,9 @@
       </section>
 
       <section id="dashboard-content" hidden>
-        <aside class="admin-sidebar" aria-label="التنقل">
-          <div class="brand-mark">م</div>
-          <p class="sidebar-brand">مطعمنا</p>
+        <aside id="admin-sidebar" class="admin-sidebar" aria-label="التنقل" hidden>
+          <div class="brand-mark">ك</div>
+          <p class="sidebar-brand">كبابجي العرب</p>
           <nav class="sidebar-nav">
             <button class="sidebar-link is-active" type="button" data-view="overview">⌂ <span>نظرة عامة</span></button>
             <button class="sidebar-link" type="button" data-view="orders">▤ <span>الطلبات</span><b id="sidebar-new-count">0</b></button>
@@ -42,11 +42,14 @@
           </div>
         </aside>
         <div class="dashboard-body">
+        <button id="sidebar-toggle" class="sidebar-toggle" type="button" aria-controls="admin-sidebar" aria-expanded="false">
+          ☰ <span>القائمة</span>
+        </button>
         <div class="dashboard-hero">
           <div>
-            <p class="eyebrow">مركز تشغيل المطعم</p>
-            <h1>صباح الخير، جاهزين للطلبات؟</h1>
-            <p class="hero-subtitle">تابع حركة المطبخ والتوصيل من مكان واحد.</p>
+            <p class="eyebrow">مركز تشغيل كبابجي العرب</p>
+            <h1>جاهزين للطلبات؟</h1>
+            <p class="hero-subtitle">تابع المطبخ والتوصيل من مكان واحد.</p>
           </div>
           <div class="live-indicator"><span></span> مباشر الآن</div>
         </div>
@@ -54,7 +57,7 @@
           <div class="admin-heading">
             <div class="admin-heading-mark">م</div>
             <div>
-              <div class="admin-breadcrumb"><span>مطعمنا</span><i>•</i><strong>مركز الإدارة</strong></div>
+              <div class="admin-breadcrumb"><span>كبابجي العرب</span><i>•</i><strong>مركز الإدارة</strong></div>
               <h1>لوحة الطلبات</h1>
               <p id="last-updated" class="last-updated">جاري تحميل البيانات...</p>
             </div>
@@ -140,3 +143,4 @@
     </div>
   </body>
 </html>
+
