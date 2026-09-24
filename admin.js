@@ -38,6 +38,8 @@
         detailTitle: $("#detail-title"),
         detailContent: $("#detail-content"),
         sidebarNew: $("#sidebar-new-count"),
+        sidebar: $("#admin-sidebar"),
+        sidebarToggle: $("#sidebar-toggle"),
         sidebarPanel: $("#sidebar-panel"),
         sidebarPanelIcon: $("#sidebar-panel-icon"),
         sidebarPanelTitle: $("#sidebar-panel-title"),
@@ -126,12 +128,19 @@
         elements.dashboard.hidden = !authenticated;
     };
 
+    const setSidebarOpen = (isOpen) => {
+        elements.sidebar.hidden = !isOpen;
+        elements.sidebarToggle.setAttribute("aria-expanded", String(isOpen));
+        elements.sidebarToggle.classList.toggle("is-open", isOpen);
+        elements.sidebarToggle.querySelector("span").textContent = isOpen ? "إغلاق القائمة" : "القائمة";
+    };
+
     const openSidebarPanel = (view) => {
         const panelData = {
             overview: {
                 icon: "⌂",
                 title: "نظرة عامة",
-                description: "ملخص سريع لحالة المطعم الآن.",
+                description: "ملخص سريع لحالة كبابجي العرب الآن.",
                 content: `لديك ${orders.length} طلبًا، منها ${orders.filter((order) => order.status === "new").length} طلبات جديدة.`,
                 action: "البقاء في الرئيسية",
             },
@@ -291,12 +300,15 @@
         button.disabled = true;
         const originalLabel = button.textContent;
         button.textContent = "جاري الحذف...";
-        const { error } = await client.from("orders").delete().eq("id", order.id);
+        const { error } = await client.rpc("delete_order", { target_order_id: order.id });
         button.disabled = false;
         button.textContent = originalLabel;
         if (error) {
             console.error("فشل حذف الطلب:", error);
-            window.alert("تعذر حذف الطلب. تأكد من تشغيل صلاحية الحذف في Supabase.");
+            const details = [error.message, error.code].filter(Boolean).join(" — ");
+            window.alert(details
+                ? `تعذر حذف الطلب:\n${details}`
+                : "تعذر حذف الطلب: لم يتم نشر دالة الحذف في Supabase بعد.");
             return;
         }
 
@@ -480,6 +492,12 @@
     elements.signOut.addEventListener("click", async () => {
         const { error } = await client.auth.signOut();
         if (error) console.error("فشل تسجيل الخروج:", error);
+    });
+    elements.sidebarToggle.addEventListener("click", () => {
+        setSidebarOpen(elements.sidebar.hidden);
+    });
+    document.querySelectorAll("[data-view]").forEach((button) => {
+        button.addEventListener("click", () => setSidebarOpen(false));
     });
     elements.themeToggle.addEventListener("click", () => {
         setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark");
