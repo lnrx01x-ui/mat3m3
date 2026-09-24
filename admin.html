@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="لوحة تحكم مطعمنا لإدارة الطلبات" />
+    <title>لوحة تحكم المطعم</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="admin.js" defer></script>
+  </head>
+  <body>
+    <main class="admin-main">
+      <section id="login-section" class="login-section" aria-labelledby="login-title">
+        <p class="eyebrow">مطعمنا</p>
+        <h1 id="login-title">دخول لوحة التحكم</h1>
+        <form id="login-form">
+          <label class="form-field" for="admin-email">البريد الإلكتروني</label>
+          <input id="admin-email" type="email" autocomplete="username" required />
+          <label class="form-field" for="admin-password">كلمة المرور</label>
+          <input id="admin-password" type="password" autocomplete="current-password" required />
+          <button class="confirm-order" type="submit">دخول آمن</button>
+          <p id="login-message" class="order-message" role="alert"></p>
+        </form>
+      </section>
+
+      <section id="dashboard-content" hidden>
+        <aside class="admin-sidebar" aria-label="التنقل">
+          <div class="brand-mark">م</div>
+          <p class="sidebar-brand">مطعمنا</p>
+          <nav class="sidebar-nav">
+            <button class="sidebar-link is-active" type="button" data-view="overview">⌂ <span>نظرة عامة</span></button>
+            <button class="sidebar-link" type="button" data-view="orders">▤ <span>الطلبات</span><b id="sidebar-new-count">0</b></button>
+            <button class="sidebar-link" type="button" data-view="kitchen">◌ <span>المطبخ</span></button>
+            <button class="sidebar-link" type="button" data-view="delivery">➜ <span>التوصيل</span></button>
+          </nav>
+          <div class="sidebar-footer">
+            <span class="live-dot"></span>
+            <span>النظام متصل</span>
+          </div>
+        </aside>
+        <div class="dashboard-body">
+        <div class="dashboard-hero">
+          <div>
+            <p class="eyebrow">مركز تشغيل المطعم</p>
+            <h1>صباح الخير، جاهزين للطلبات؟</h1>
+            <p class="hero-subtitle">تابع حركة المطبخ والتوصيل من مكان واحد.</p>
+          </div>
+          <div class="live-indicator"><span></span> مباشر الآن</div>
+        </div>
+        <header class="admin-header">
+          <div class="admin-heading">
+            <div class="admin-heading-mark">م</div>
+            <div>
+              <div class="admin-breadcrumb"><span>مطعمنا</span><i>•</i><strong>مركز الإدارة</strong></div>
+              <h1>لوحة الطلبات</h1>
+              <p id="last-updated" class="last-updated">جاري تحميل البيانات...</p>
+            </div>
+          </div>
+          <div class="header-actions">
+            <button id="theme-toggle" class="admin-secondary-button icon-action" type="button" aria-label="تبديل الوضع">🌙 <span>الوضع الداكن</span></button>
+            <button id="refresh-orders" class="admin-secondary-button icon-action" type="button">↻ <span>تحديث</span></button>
+            <button id="export-orders" class="admin-secondary-button icon-action" type="button">⇩ <span>تصدير</span></button>
+            <span class="header-divider" aria-hidden="true"></span>
+            <button id="sign-out" class="admin-secondary-button sign-out-button" type="button">خروج <span>↪</span></button>
+          </div>
+        </header>
+        <section class="quick-status" aria-label="حالات الطلبات السريعة">
+          <button class="quick-status-card is-active" type="button" data-quick-status="all">
+            <span class="quick-icon">◉</span><span><small>كل الطلبات</small><strong id="quick-all">0</strong></span>
+          </button>
+          <button class="quick-status-card" type="button" data-quick-status="new">
+            <span class="quick-icon new">✦</span><span><small>تحتاج انتباه</small><strong id="quick-new">0</strong></span>
+          </button>
+          <button class="quick-status-card" type="button" data-quick-status="preparing">
+            <span class="quick-icon preparing">◌</span><span><small>في المطبخ</small><strong id="quick-preparing">0</strong></span>
+          </button>
+          <button class="quick-status-card" type="button" data-quick-status="delivering">
+            <span class="quick-icon delivering">➜</span><span><small>في التوصيل</small><strong id="quick-delivering">0</strong></span>
+          </button>
+        </section>
+        <section class="stats" aria-label="ملخص الطلبات">
+          <div class="stat-card"><span>كل الطلبات</span><strong id="total-orders">0</strong></div>
+          <div class="stat-card"><span>طلبات جديدة</span><strong id="new-orders">0</strong></div>
+          <div class="stat-card"><span>إجمالي المبيعات</span><strong id="total-sales">0 ج.م</strong></div>
+          <div class="stat-card"><span>قيد التنفيذ</span><strong id="active-orders">0</strong></div>
+          <div class="stat-card"><span>طلبات اليوم</span><strong id="today-orders">0</strong></div>
+          <div class="stat-card"><span>مبيعات اليوم</span><strong id="today-sales">0 ج.م</strong></div>
+          <div class="stat-card"><span>متوسط الطلب</span><strong id="average-order">0 ج.م</strong></div>
+        </section>
+        <section class="orders-toolbar" aria-label="أدوات البحث والفلترة">
+          <label class="search-field" for="order-search"><span>بحث</span><input id="order-search" type="search" placeholder="رقم الطلب، الاسم، الهاتف..." /></label>
+          <label class="filter-field" for="status-filter"><span>الحالة</span><select id="status-filter"><option value="all">كل الطلبات</option><option value="new">طلبات جديدة</option><option value="accepted">تم القبول</option><option value="preparing">قيد التحضير</option><option value="delivering">خرج للتوصيل</option><option value="delivered">تم التسليم</option><option value="cancelled">ملغي</option></select></label>
+          <label class="filter-field" for="sort-orders"><span>الترتيب</span><select id="sort-orders"><option value="newest">الأحدث أولًا</option><option value="oldest">الأقدم أولًا</option><option value="highest">الأعلى سعرًا</option></select></label>
+          <label class="filter-field" for="date-filter"><span>الفترة</span><select id="date-filter"><option value="all">كل الفترات</option><option value="today">اليوم</option><option value="week">آخر 7 أيام</option><option value="month">آخر 30 يومًا</option></select></label>
+          <button id="notifications-toggle" class="admin-secondary-button" type="button">🔔 التنبيهات</button>
+        </section>
+        <section class="view-switcher" aria-label="طريقة عرض الطلبات">
+          <div>
+            <h2 id="active-view-title">نظرة عامة</h2>
+            <p id="active-view-description">كل ما يحدث في مطعمك في مكان واحد.</p>
+          </div>
+          <div class="view-buttons">
+            <button class="view-button is-active" type="button" data-orders-view="list">☷ قائمة</button>
+            <button class="view-button" type="button" data-orders-view="board">▦ لوحة حالات</button>
+          </div>
+        </section>
+        <section id="orders-list" class="orders-list" aria-live="polite"></section>
+        <section id="orders-board" class="orders-board" aria-live="polite" hidden>
+          <div class="board-column" data-board-status="new"><header><span>طلبات جديدة</span><b>0</b></header><div></div></div>
+          <div class="board-column" data-board-status="accepted"><header><span>تم القبول</span><b>0</b></header><div></div></div>
+          <div class="board-column" data-board-status="preparing"><header><span>في المطبخ</span><b>0</b></header><div></div></div>
+          <div class="board-column" data-board-status="delivering"><header><span>في التوصيل</span><b>0</b></header><div></div></div>
+        </section>
+        </div>
+      </section>
+    </main>
+    <div id="order-detail-modal" class="admin-modal" hidden>
+      <div class="admin-modal-backdrop" data-close-detail></div>
+      <section class="detail-sheet" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+        <button class="detail-close" type="button" aria-label="إغلاق" data-close-detail>×</button>
+        <p class="eyebrow">تفاصيل الطلب</p>
+        <h2 id="detail-title">#ORDER</h2>
+        <div id="detail-content"></div>
+      </section>
+    </div>
+    <div id="sidebar-panel" class="admin-modal" hidden>
+      <div class="admin-modal-backdrop" data-close-sidebar-panel></div>
+      <section class="sidebar-panel-sheet" role="dialog" aria-modal="true" aria-labelledby="sidebar-panel-title">
+        <button class="detail-close" type="button" aria-label="إغلاق" data-close-sidebar-panel>×</button>
+        <span id="sidebar-panel-icon" class="sidebar-panel-icon">⌂</span>
+        <p class="eyebrow">مركز الإدارة</p>
+        <h2 id="sidebar-panel-title">نظرة عامة</h2>
+        <p id="sidebar-panel-description"></p>
+        <div id="sidebar-panel-content" class="sidebar-panel-content"></div>
+        <button id="sidebar-panel-action" class="confirm-order" type="button">عرض التفاصيل</button>
+      </section>
+    </div>
+  </body>
+</html>

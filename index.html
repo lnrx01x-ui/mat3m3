@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta id="theme-color" name="theme-color" content="#f2f2f7" />
+    <meta name="description" content="أشهى الأكلات بأفضل الأسعار" />
+    <title>مطعمنا</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+        <div id="splash-screen" class="splash-screen" aria-label="جاري فتح مطعمنا">
+            <div class="splash-content">
+                <div class="splash-logo">م</div>
+                <strong>مطعمنا</strong>
+                <span>نكهة تستحق التكرار</span>
+                <i class="splash-loader" aria-hidden="true"></i>
+            </div>
+        </div>
+        <div id="toast" class="toast" role="status" aria-live="polite"></div>
+        <main>
+            <header class="site-header">
+                <a class="brand" href="#" aria-label="العودة إلى بداية الصفحة">
+                    <span class="brand-mark">م</span>
+                    <span>
+                        <strong>مطعمنا</strong>
+                        <small>طعم يستحق التجربة</small>
+                    </span>
+                </a>
+                <nav class="site-nav" aria-label="التنقل الرئيسي">
+                    <a class="nav-link is-active" href="#menu">القائمة</a>
+                    <a class="nav-link" href="#menu">اطلب الآن</a>
+                </nav>
+                <div class="header-actions">
+                    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="تفعيل الوضع الداكن">
+                        <span aria-hidden="true">🌙</span><span class="theme-label">الوضع الداكن</span>
+                    </button>
+                    <button id="cart-toggle" class="cart-toggle" type="button" aria-controls="cart-modal" aria-expanded="false">
+                        <span aria-hidden="true">🛒</span><span class="cart-label">السلة</span><span id="cart-count">0</span>
+                    </button>
+                </div>
+            </header>
+            <section class="hero" aria-labelledby="hero-title">
+                <div class="hero-copy">
+                    <span class="hero-kicker"><i></i> نكهة تستحق التكرار</span>
+                    <h1 id="hero-title">أهلًا بكم في<br /><em>مطعمنا</em></h1>
+                    <p>أشهى الأكلات، مكونات طازجة، وتجربة تصل إلى بابك بكل حب.</p>
+                    <div class="hero-actions">
+                        <button id="menu-toggle" type="button" aria-controls="menu" aria-expanded="false">
+                            استعرض القائمة <span>←</span>
+                        </button>
+                        <a class="hero-link" href="#menu">اكتشف المذاق <span>↗</span></a>
+                    </div>
+                    <div class="hero-proof">
+                        <div class="proof-avatars"><span>ر</span><span>م</span><span>س</span></div>
+                        <div><strong>+2,500</strong><small>عميل سعيد هذا الشهر</small></div>
+                    </div>
+                </div>
+                <div class="hero-art" aria-hidden="true">
+                    <div class="hero-glow"></div>
+                    <div class="hero-plate">🍽️</div>
+                    <div class="floating-card floating-card-top"><span>⭐</span><strong>4.9</strong><small>تقييم العملاء</small></div>
+                    <div class="floating-card floating-card-bottom"><span>🔥</span><div><strong>الأكثر طلبًا</strong><small>شيش طاووق</small></div></div>
+                </div>
+            </section>
+            <section class="trust-strip" aria-label="مميزات مطعمنا">
+                <div><span>⚡</span><strong>تحضير سريع</strong><small>يصل ساخنًا</small></div>
+                <div><span>✦</span><strong>مكونات طازجة</strong><small>اختيارنا اليومي</small></div>
+                <div><span>♡</span><strong>طعم مضمون</strong><small>نطبخ بحب</small></div>
+                <div><span>◎</span><strong>دفع عند الاستلام</strong><small>بكل أمان</small></div>
+            </section>
+            <section id="menu" class="menu" aria-labelledby="menu-title" hidden>
+                <h2 id="menu-title">قائمة الطعام</h2>
+
+                <div class="menu-sections">
+                    <section class="menu-section">
+                        <h3>المقبلات</h3>
+                        <article class="product" data-product="حمص بالطحينة" data-price="45">
+                            <div>
+                                <h4>حمص بالطحينة</h4>
+                                <p>حمص كريمي مع زيت الزيتون</p>
+                            </div>
+                            <strong>45 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                        <article class="product" data-product="بطاطس مقلية" data-price="35">
+                            <div>
+                                <h4>بطاطس مقلية</h4>
+                                <p>بطاطس مقرمشة مع صوص خاص</p>
+                            </div>
+                            <strong>35 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                    </section>
+
+                    <section class="menu-section">
+                        <h3>السلطات</h3>
+                        <article class="product" data-product="سلطة خضراء" data-price="40">
+                            <div>
+                                <h4>سلطة خضراء</h4>
+                                <p>خضروات طازجة بتتبيلة الليمون</p>
+                            </div>
+                            <strong>40 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                        <article class="product" data-product="فتوش" data-price="50">
+                            <div>
+                                <h4>فتوش</h4>
+                                <p>خضروات مشكلة مع خبز محمص</p>
+                            </div>
+                            <strong>50 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                    </section>
+
+                    <section class="menu-section">
+                        <h3>الأطباق الرئيسية</h3>
+                        <article class="product" data-product="شيش طاووق" data-price="150">
+                            <div>
+                                <h4>شيش طاووق</h4>
+                                <p>قطع دجاج مشوية مع أرز وبطاطس</p>
+                            </div>
+                            <strong>150 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                        <article class="product" data-product="كفتة مشوية" data-price="165">
+                            <div>
+                                <h4>كفتة مشوية</h4>
+                                <p>كفتة لحم طازجة مع أرز وسلطة</p>
+                            </div>
+                            <strong>165 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                    </section>
+
+                    <section class="menu-section">
+                        <h3>الوجبات السريعة</h3>
+                        <article class="product" data-product="برجر كلاسيك" data-price="120">
+                            <div>
+                                <h4>برجر كلاسيك</h4>
+                                <p>برجر لحم مع جبنة وخضروات</p>
+                            </div>
+                            <strong>120 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                        <article class="product" data-product="ساندوتش شاورما" data-price="85">
+                            <div>
+                                <h4>ساندوتش شاورما</h4>
+                                <p>شاورما دجاج مع الثومية والمخلل</p>
+                            </div>
+                            <strong>85 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                    </section>
+
+                    <section class="menu-section">
+                        <h3>الحلويات والمشروبات</h3>
+                        <article class="product" data-product="أم علي" data-price="60">
+                            <div>
+                                <h4>أم علي</h4>
+                                <p>حلوى شرقية بالمكسرات والقشطة</p>
+                            </div>
+                            <strong>60 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                        <article class="product" data-product="عصير مانجو طازج" data-price="55">
+                            <div>
+                                <h4>عصير مانجو طازج</h4>
+                                <p>مانجو طبيعية بدون ألوان صناعية</p>
+                            </div>
+                            <strong>55 ج.م</strong>
+                            <button class="product-action" type="button">اطلب</button>
+                        </article>
+                    </section>
+                </div>
+            </section>
+        </main>
+        <button id="back-to-top" class="back-to-top" type="button" aria-label="العودة إلى أعلى الصفحة">↑</button>
+        <div class="order-modal" id="order-modal" hidden>
+            <div class="modal-backdrop" data-close-modal></div>
+            <section class="order-sheet" role="dialog" aria-modal="true" aria-labelledby="order-title">
+                <button class="close-modal" type="button" aria-label="إغلاق" data-close-modal>×</button>
+                <p class="eyebrow">تفاصيل الطلب</p>
+                <h2 id="order-title">اسم الصنف</h2>
+                <form id="order-form">
+                    <fieldset>
+                        <legend>اختر الحجم</legend>
+                        <label>
+                            <input type="radio" name="size" value="صغير" data-extra="0" checked />
+                            <span>صغير</span>
+                        </label>
+                        <label>
+                            <input type="radio" name="size" value="وسط" data-extra="15" />
+                            <span>وسط <small>+15 ج.م</small></span>
+                        </label>
+                        <label>
+                            <input type="radio" name="size" value="كبير" data-extra="30" />
+                            <span>كبير <small>+30 ج.م</small></span>
+                        </label>
+                    </fieldset>
+                    <label class="quantity-label" for="quantity">الكمية</label>
+                    <input id="quantity" name="quantity" type="number" min="1" max="20" value="1" required />
+                    <div class="order-total">
+                        <span>الإجمالي</span>
+                        <strong id="order-total">0 ج.م</strong>
+                    </div>
+                    <button class="confirm-order" type="submit">تأكيد الطلب</button>
+                </form>
+                <p class="order-message" id="order-message" role="status"></p>
+            </section>
+        </div>
+        <div class="order-modal" id="cart-modal" hidden>
+            <div class="modal-backdrop" data-close-cart></div>
+            <section class="order-sheet cart-sheet" role="dialog" aria-modal="true" aria-labelledby="cart-title">
+                <button class="close-modal" type="button" aria-label="إغلاق السلة" data-close-cart>×</button>
+                <p class="eyebrow">مراجعة الطلب</p>
+                <h2 id="cart-title">سلة الطلبات</h2>
+                <div id="cart-items" class="cart-items"></div>
+                <div class="order-total">
+                    <span>الإجمالي</span>
+                    <strong id="cart-total">0 ج.م</strong>
+                </div>
+                <div class="cart-actions">
+                    <button id="continue-shopping" class="secondary-action" type="button">أكمل التسوق</button>
+                    <button id="checkout-button" class="confirm-order" type="button" disabled>إتمام الطلب</button>
+                </div>
+            </section>
+        </div>
+        <div class="order-modal" id="checkout-modal" hidden>
+            <div class="modal-backdrop" data-close-checkout></div>
+            <section class="order-sheet" role="dialog" aria-modal="true" aria-labelledby="checkout-title">
+                <button class="close-modal" type="button" aria-label="إغلاق" data-close-checkout>×</button>
+                <p class="eyebrow">بيانات التوصيل</p>
+                <h2 id="checkout-title">إتمام الطلب</h2>
+                <form id="checkout-form">
+                    <label class="form-field" for="customer-name">الاسم</label>
+                    <input id="customer-name" name="name" type="text" autocomplete="name" required />
+                    <label class="form-field" for="customer-phone">رقم الهاتف</label>
+                    <input id="customer-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required />
+                    <label class="form-field" for="customer-address">العنوان</label>
+                    <textarea id="customer-address" name="address" rows="3" autocomplete="street-address" required></textarea>
+                    <label class="form-field" for="customer-notes">ملاحظات (اختياري)</label>
+                    <textarea id="customer-notes" name="notes" rows="2"></textarea>
+                    <label class="form-field" for="payment-method">طريقة الدفع</label>
+                    <select id="payment-method" name="paymentMethod">
+                        <option value="cash">الدفع نقدًا عند الاستلام</option>
+                        <option value="transfer">تحويل بنكي</option>
+                    </select>
+                    <button class="confirm-order" type="submit">تأكيد وإرسال الطلب</button>
+                </form>
+                <p class="order-message" id="checkout-message" role="status"></p>
+            </section>
+        </div>
+    </body>
+</html>
